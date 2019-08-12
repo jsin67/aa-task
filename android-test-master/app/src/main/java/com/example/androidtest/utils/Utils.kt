@@ -19,15 +19,12 @@ fun verifyAvailableNetwork(activity: Context): Boolean {
  * @param time: time value
  */
 fun convertDateFormat(time: String): String {
-    val sdfSource = SimpleDateFormat("MM-dd-yyyy hh:mm:ss")
+    val sdfSource = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
 
-    //parse the string into Date object
     val date = sdfSource.parse(time)
 
-    //create SimpleDateFormat object with desired date format
-    val sdfDestination = SimpleDateFormat("E hh:mm")
+    val sdfDestination = SimpleDateFormat("E hh:mm a")
 
-    //parse the date into another format
     return sdfDestination.format(date)
 }
 

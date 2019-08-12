@@ -16,9 +16,6 @@
             android:theme="@style/AppTheme"
             android:usesCleartextTraffic="true"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.DetailsActivity">
-        </activity>
-
         <uses-library
                 android:name="org.apache.http.legacy"
                 android:required="false"/>

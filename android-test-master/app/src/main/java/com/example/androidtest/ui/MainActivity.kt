@@ -1,7 +1,5 @@
 package com.example.androidtest.ui
 
-import android.content.IntentFilter
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,12 +14,11 @@ import com.example.androidtest.R
 import com.example.androidtest.di.Injectable
 import com.example.androidtest.models.WeatherResponse
 import com.example.androidtest.ui.adapter.WeatherListAdapter
-import com.example.androidtest.utils.ConnectivityReceiver
+import com.example.androidtest.utils.verifyAvailableNetwork
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), Injectable, OnWeatherTappedListener,
-    ConnectivityReceiver.ConnectivityReceiverListener {
+class MainActivity : AppCompatActivity(), Injectable, OnWeatherTappedListener {
 
     @Inject
     internal lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -35,54 +32,24 @@ class MainActivity : AppCompatActivity(), Injectable, OnWeatherTappedListener,
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
         setContentView(R.layout.activity_main)
         setupView()
-        registerForInternet()
+
 
         viewModel.weatherLiveData.observe(this, Observer { weatherInfoList ->
             if (weatherInfoList != null) {
                 adapter.setWeatherData(weatherInfoList)
+            }else {
+                Toast.makeText(this, getString(R.string.data_error), Toast.LENGTH_LONG).show()
             }
             dismissProgressing()
         })
 
-    }
-
-    /**
-     * Callback for every change in network connection
-     * @param isConnected: true if internet is connected
-     */
-    override fun onNetworkConnectionChanged(isConnected: Boolean) {
-        if (isConnected) {
-            if (viewModel.weatherLiveData.value.isNullOrEmpty()) {
-                fetchData()
-            } else {
-                adapter.setWeatherData(viewModel.weatherLiveData.value)
-            }
-        } else {
+        if(verifyAvailableNetwork(this)) {
+            showProgressing()
+            viewModel.getWeatherData("london,uk")
+        }else {
             Toast.makeText(this, getString(R.string.internet_warning), Toast.LENGTH_LONG).show()
-            adapter.setWeatherData(emptyList())
         }
     }
-
-    override fun onResume() {
-        super.onResume()
-        ConnectivityReceiver.connectivityReceiverListener = this
-    }
-
-    override fun onStop() {
-        super.onStop()
-        ConnectivityReceiver.connectivityReceiverListener = null
-    }
-
-    /**
-     * Registers for internet change situation
-     */
-    private fun registerForInternet() {
-        registerReceiver(
-            ConnectivityReceiver(),
-            IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-        )
-    }
-
 
     /**
      * Sets up views
@@ -125,7 +92,7 @@ class MainActivity : AppCompatActivity(), Injectable, OnWeatherTappedListener,
 
     /**
      * Callback when weatherResponse is selected
-     * @param weatherResponse: Selected User
+     * @param weatherResponse: Selected Item
      */
     override fun onItemTapped(weatherResponse: WeatherResponse) {
 
