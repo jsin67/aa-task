@@ -19,3 +19,11 @@ Test case report:
 Mockito - 
 
 ![alt text](https://github.com/jsin67/aa-task/blob/master/Screen%20Shot%202019-08-12%20at%201.01.59%20PM.png)
+
+Screenshot:-
+
+![alt text](https://github.com/jsin67/aa-task/blob/master/Screenshot_1565611492.png)
+
+
+
+
