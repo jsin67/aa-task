@@ -9,7 +9,7 @@ I have used following tech-stack to develop this application
 - [x] RxJava : To fetch the response from API. 
 - [x] Retrofit : Called API with query params.
 - [x] Dagger : Dependency injector. 
-- [x] Mockito : Tested ViewModel since it is handling local logic of blocking/following. Used mockito to mock the repository.The code coverage for ViewModel is 85%.
+- [x] Mockito : Tested ViewModel since it is handling local logic of conversion into data. Used mockito to mock the repository.The code coverage for ViewModel is 85%.
  
 
 Note: If I had more time I could have done the better job in UI. I could have made this application connection aware. It should fetch the data as soon as user connects to internet. I could have taken location from user as input.    
